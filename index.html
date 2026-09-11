@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xbox Wireless Controller UI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Xbox Wireless Controller</h1>
+        
+        <div class="controller">
+            <!-- Left Side -->
+            <div class="controller-left">
+                <!-- Left Bumper -->
+                <div class="bumper bumper-left" id="lb">LB</div>
+                
+                <!-- Left Trigger -->
+                <div class="trigger trigger-left" id="lt">LT</div>
+                
+                <!-- D-Pad -->
+                <div class="dpad">
+                    <button class="dpad-btn dpad-up" id="dpad-up">▲</button>
+                    <button class="dpad-btn dpad-left" id="dpad-left">◀</button>
+                    <button class="dpad-btn dpad-down" id="dpad-down">▼</button>
+                    <button class="dpad-btn dpad-right" id="dpad-right">▶</button>
+                </div>
+                
+                <!-- Left Stick -->
+                <div class="stick-container left-stick">
+                    <div class="stick" id="left-stick">
+                        <div class="stick-inner"></div>
+                    </div>
+                    <button class="stick-btn" id="left-stick-btn">L3</button>
+                </div>
+            </div>
+            
+            <!-- Center Panel -->
+            <div class="controller-center">
+                <!-- Menu & View Buttons -->
+                <div class="center-buttons">
+                    <button class="menu-btn" id="view-btn">View</button>
+                    <button class="menu-btn" id="menu-btn">Menu</button>
+                </div>
+                
+                <!-- Xbox Button -->
+                <button class="xbox-btn" id="xbox-btn">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="currentColor"/>
+                        <path d="M35 35 Q50 50 35 65 Q50 50 65 35 Q50 50 65 65" fill="white" stroke="white" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Right Side -->
+            <div class="controller-right">
+                <!-- Right Bumper -->
+                <div class="bumper bumper-right" id="rb">RB</div>
+                
+                <!-- Right Trigger -->
+                <div class="trigger trigger-right" id="rt">RT</div>
+                
+                <!-- Action Buttons (A, B, X, Y) -->
+                <div class="action-buttons">
+                    <button class="btn-y" id="btn-y">Y</button>
+                    <button class="btn-x" id="btn-x">X</button>
+                    <button class="btn-b" id="btn-b">B</button>
+                    <button class="btn-a" id="btn-a">A</button>
+                </div>
+                
+                <!-- Right Stick -->
+                <div class="stick-container right-stick">
+                    <div class="stick" id="right-stick">
+                        <div class="stick-inner"></div>
+                    </div>
+                    <button class="stick-btn" id="right-stick-btn">R3</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Output Display -->
+        <div class="output">
+            <h2>Button Output</h2>
+            <div id="output-display">Press buttons to see activity...</div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
