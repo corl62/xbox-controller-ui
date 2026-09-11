@@ -9,80 +9,99 @@
 <body>
     <div class="container">
         <h1>Xbox Wireless Controller</h1>
+        <p class="subtitle">Interactive Controller Simulator</p>
         
         <div class="controller">
             <!-- Left Side -->
-            <div class="controller-left">
-                <!-- Left Bumper -->
-                <div class="bumper bumper-left" id="lb">LB</div>
-                
-                <!-- Left Trigger -->
-                <div class="trigger trigger-left" id="lt">LT</div>
-                
+            <div class="left-side">
                 <!-- D-Pad -->
-                <div class="dpad">
-                    <button class="dpad-btn dpad-up" id="dpad-up">▲</button>
-                    <button class="dpad-btn dpad-left" id="dpad-left">◀</button>
-                    <button class="dpad-btn dpad-down" id="dpad-down">▼</button>
-                    <button class="dpad-btn dpad-right" id="dpad-right">▶</button>
+                <div class="dpad-container">
+                    <div class="dpad">
+                        <button class="dpad-btn dpad-up" data-button="dpad-up">↑</button>
+                        <button class="dpad-btn dpad-left" data-button="dpad-left">←</button>
+                        <button class="dpad-btn dpad-right" data-button="dpad-right">→</button>
+                        <button class="dpad-btn dpad-down" data-button="dpad-down">↓</button>
+                    </div>
                 </div>
                 
                 <!-- Left Stick -->
-                <div class="stick-container left-stick">
-                    <div class="stick" id="left-stick">
+                <div class="stick-container">
+                    <div class="stick" id="leftStick">
                         <div class="stick-inner"></div>
                     </div>
-                    <button class="stick-btn" id="left-stick-btn">L3</button>
+                    <button class="stick-btn" data-button="left-stick-click">Click</button>
                 </div>
             </div>
             
-            <!-- Center Panel -->
-            <div class="controller-center">
-                <!-- Menu & View Buttons -->
-                <div class="center-buttons">
-                    <button class="menu-btn" id="view-btn">View</button>
-                    <button class="menu-btn" id="menu-btn">Menu</button>
+            <!-- Center -->
+            <div class="center">
+                <!-- Menu and View Buttons -->
+                <div class="menu-buttons">
+                    <button class="menu-btn" data-button="menu">Menu</button>
+                    <button class="menu-btn" data-button="view">View</button>
                 </div>
                 
                 <!-- Xbox Button -->
-                <button class="xbox-btn" id="xbox-btn">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="50" r="45" fill="currentColor"/>
-                        <path d="M35 35 Q50 50 35 65 Q50 50 65 35 Q50 50 65 65" fill="white" stroke="white" stroke-width="2"/>
+                <button class="xbox-btn" data-button="xbox">
+                    <svg viewBox="0 0 24 24" width="40" height="40">
+                        <circle cx="12" cy="12" r="10" fill="currentColor"/>
+                        <text x="12" y="16" text-anchor="middle" font-size="16" font-weight="bold" fill="white">✕</text>
                     </svg>
                 </button>
             </div>
             
             <!-- Right Side -->
-            <div class="controller-right">
-                <!-- Right Bumper -->
-                <div class="bumper bumper-right" id="rb">RB</div>
-                
-                <!-- Right Trigger -->
-                <div class="trigger trigger-right" id="rt">RT</div>
-                
-                <!-- Action Buttons (A, B, X, Y) -->
-                <div class="action-buttons">
-                    <button class="btn-y" id="btn-y">Y</button>
-                    <button class="btn-x" id="btn-x">X</button>
-                    <button class="btn-b" id="btn-b">B</button>
-                    <button class="btn-a" id="btn-a">A</button>
+            <div class="right-side">
+                <!-- Action Buttons (Y, X, B, A) -->
+                <div class="buttons-container">
+                    <button class="action-btn btn-y" data-button="y">Y</button>
+                    <button class="action-btn btn-x" data-button="x">X</button>
+                    <button class="action-btn btn-b" data-button="b">B</button>
+                    <button class="action-btn btn-a" data-button="a">A</button>
                 </div>
                 
                 <!-- Right Stick -->
-                <div class="stick-container right-stick">
-                    <div class="stick" id="right-stick">
+                <div class="stick-container">
+                    <div class="stick" id="rightStick">
                         <div class="stick-inner"></div>
                     </div>
-                    <button class="stick-btn" id="right-stick-btn">R3</button>
+                    <button class="stick-btn" data-button="right-stick-click">Click</button>
                 </div>
             </div>
         </div>
         
+        <!-- Bumpers and Triggers -->
+        <div class="bumpers-triggers">
+            <div class="bumper-group">
+                <button class="bumper-btn" data-button="lb">LB</button>
+                <button class="trigger-btn" data-button="lt">LT</button>
+            </div>
+            <div class="bumper-group">
+                <button class="trigger-btn" data-button="rt">RT</button>
+                <button class="bumper-btn" data-button="rb">RB</button>
+            </div>
+        </div>
+        
         <!-- Output Display -->
-        <div class="output">
-            <h2>Button Output</h2>
-            <div id="output-display">Press buttons to see activity...</div>
+        <div class="output-section">
+            <h3>Input Output</h3>
+            <div class="output-display" id="outputDisplay">
+                <p class="placeholder">Press any button or move the sticks...</p>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>How to Use</h3>
+            <ul>
+                <li><strong>Mouse:</strong> Click buttons or drag sticks</li>
+                <li><strong>Touch:</strong> Tap buttons or drag sticks on mobile</li>
+                <li><strong>Keyboard:</strong> Use shortcuts (see below)</li>
+            </ul>
+            <div class="keyboard-shortcuts">
+                <p><strong>Keyboard Shortcuts:</strong></p>
+                <p>D-Pad: W/A/S/D | Buttons: Y/X/B/Space(A) | Bumpers: Q/E | Triggers: T/G | View/Menu: V/M | Xbox: Z</p>
+            </div>
         </div>
     </div>
     
