@@ -1,0 +1,440 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #ffffff;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.controller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+    border-radius: 40px;
+    padding: 40px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid #333;
+}
+
+/* Left Side */
+.controller-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.bumper {
+    width: 80px;
+    height: 25px;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #444;
+    color: #888;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.bumper-left {
+    align-self: flex-start;
+    margin-left: 20px;
+}
+
+.bumper-right {
+    align-self: flex-end;
+    margin-right: 20px;
+}
+
+.bumper:active {
+    background: linear-gradient(145deg, #3a7f3a, #2d6b2d);
+    border-color: #4a9f4a;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(74, 159, 74, 0.5);
+    color: #90EE90;
+}
+
+.trigger {
+    width: 40px;
+    height: 60px;
+    border-radius: 10px 10px 20px 20px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #444;
+    color: #888;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.trigger:active {
+    background: linear-gradient(145deg, #3a7f3a, #2d6b2d);
+    border-color: #4a9f4a;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(74, 159, 74, 0.5);
+    color: #90EE90;
+}
+
+/* D-Pad */
+.dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 5px;
+}
+
+.dpad-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #444;
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dpad-up {
+    grid-row: 1;
+}
+
+.dpad-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.dpad-down {
+    grid-row: 3;
+}
+
+.dpad-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.dpad-btn:hover {
+    background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+    border-color: #555;
+}
+
+.dpad-btn:active {
+    background: linear-gradient(145deg, #4a9f4a, #3a7f3a);
+    border-color: #5abf5a;
+    color: #90EE90;
+    box-shadow: 0 0 15px rgba(74, 159, 74, 0.5);
+}
+
+/* Left Stick */
+.stick-container {
+    position: relative;
+    width: 120px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.stick {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a);
+    border: 3px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8), 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: all 0.1s ease;
+}
+
+.stick.active {
+    cursor: grabbing;
+}
+
+.stick-inner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #4a4a4a, #2a2a2a);
+    border: 2px solid #555;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
+    transition: all 0.1s ease;
+}
+
+.stick-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #444;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.stick-btn:hover {
+    background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+    border-color: #555;
+}
+
+.stick-btn:active {
+    background: linear-gradient(145deg, #3a7f3a, #2d6b2d);
+    border-color: #4a9f4a;
+    color: #90EE90;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(74, 159, 74, 0.5);
+}
+
+/* Center Panel */
+.controller-center {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 0 40px;
+}
+
+.center-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.menu-btn {
+    width: 70px;
+    height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #444;
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.menu-btn:hover {
+    background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+    border-color: #555;
+}
+
+.menu-btn:active {
+    background: linear-gradient(145deg, #3a7f3a, #2d6b2d);
+    border-color: #4a9f4a;
+    color: #90EE90;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(74, 159, 74, 0.5);
+}
+
+.xbox-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #1a7f1a, #0d5c0d);
+    border: 3px solid #2d9f2d;
+    color: #90EE90;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 20px rgba(74, 159, 74, 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.xbox-btn svg {
+    width: 50px;
+    height: 50px;
+    color: #90EE90;
+}
+
+.xbox-btn:hover {
+    background: linear-gradient(145deg, #2d9f2d, #1a8f1a);
+    box-shadow: 0 8px 25px rgba(74, 159, 74, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.xbox-btn:active {
+    background: linear-gradient(145deg, #0d5c0d, #1a7f1a);
+    box-shadow: 0 3px 10px rgba(74, 159, 74, 0.3), inset 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Right Side */
+.controller-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 50px);
+    grid-template-rows: repeat(2, 50px);
+    gap: 15px;
+}
+
+.btn-y {
+    grid-column: 1;
+    grid-row: 1;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #7f1a1a, #5c0d0d);
+    border: 3px solid #9f2d2d;
+    color: #FF6B6B;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.btn-x {
+    grid-column: 1;
+    grid-row: 2;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #1a3a7f, #0d1f5c);
+    border: 3px solid #2d5a9f;
+    color: #5B9FFF;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 15px rgba(91, 159, 255, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.btn-b {
+    grid-column: 2;
+    grid-row: 1;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #7f1a1a, #5c0d0d);
+    border: 3px solid #9f2d2d;
+    color: #FF6B6B;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.btn-a {
+    grid-column: 2;
+    grid-row: 2;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #1a7f1a, #0d5c0d);
+    border: 3px solid #2d9f2d;
+    color: #90EE90;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 15px rgba(74, 159, 74, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.action-buttons button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.action-buttons button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), inset 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Output Display */
+.output {
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+    border: 2px solid #333;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #90EE90;
+    font-family: 'Courier New', monospace;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.output h2 {
+    color: #90EE90;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(144, 238, 144, 0.5);
+}
+
+#output-display {
+    font-size: 1em;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .controller {
+        flex-direction: column;
+        gap: 30px;
+        padding: 30px 20px;
+    }
+
+    .controller-left,
+    .controller-right {
+        width: 100%;
+    }
+
+    .controller-center {
+        padding: 0;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .controller {
+        max-width: 100%;
+    }
+}
