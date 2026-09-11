@@ -1,225 +1,245 @@
-// Button Elements
+// Xbox Controller UI - Interactive Script
+
+// Get all button elements
 const buttons = {
-    lb: document.getElementById('lb'),
-    rb: document.getElementById('rb'),
-    lt: document.getElementById('lt'),
-    rt: document.getElementById('rt'),
-    dpadUp: document.getElementById('dpad-up'),
-    dpadDown: document.getElementById('dpad-down'),
-    dpadLeft: document.getElementById('dpad-left'),
-    dpadRight: document.getElementById('dpad-right'),
-    btnY: document.getElementById('btn-y'),
-    btnX: document.getElementById('btn-x'),
-    btnB: document.getElementById('btn-b'),
-    btnA: document.getElementById('btn-a'),
-    leftStick: document.getElementById('left-stick'),
-    leftStickBtn: document.getElementById('left-stick-btn'),
-    rightStick: document.getElementById('right-stick'),
-    rightStickBtn: document.getElementById('right-stick-btn'),
-    viewBtn: document.getElementById('view-btn'),
-    menuBtn: document.getElementById('menu-btn'),
-    xboxBtn: document.getElementById('xbox-btn'),
-    outputDisplay: document.getElementById('output-display'),
+    // D-Pad
+    dpadUp: document.querySelector('[data-button="dpad-up"]'),
+    dpadDown: document.querySelector('[data-button="dpad-down"]'),
+    dpadLeft: document.querySelector('[data-button="dpad-left"]'),
+    dpadRight: document.querySelector('[data-button="dpad-right"]'),
+    
+    // Action Buttons
+    y: document.querySelector('[data-button="y"]'),
+    x: document.querySelector('[data-button="x"]'),
+    b: document.querySelector('[data-button="b"]'),
+    a: document.querySelector('[data-button="a"]'),
+    
+    // Bumpers
+    lb: document.querySelector('[data-button="lb"]'),
+    rb: document.querySelector('[data-button="rb"]'),
+    
+    // Triggers
+    lt: document.querySelector('[data-button="lt"]'),
+    rt: document.querySelector('[data-button="rt"]'),
+    
+    // Menu Buttons
+    menu: document.querySelector('[data-button="menu"]'),
+    view: document.querySelector('[data-button="view"]'),
+    xbox: document.querySelector('[data-button="xbox"]'),
+    
+    // Sticks
+    leftStick: document.getElementById('leftStick'),
+    rightStick: document.getElementById('rightStick'),
+    leftStickClick: document.querySelector('[data-button="left-stick-click"]'),
+    rightStickClick: document.querySelector('[data-button="right-stick-click"]'),
+    
+    // Output Display
+    outputDisplay: document.getElementById('outputDisplay'),
 };
 
-// Track stick positions
-let leftStickActive = false;
-let rightStickActive = false;
-let leftStickX = 0;
-let leftStickY = 0;
-let rightStickX = 0;
-let rightStickY = 0;
+// Stick tracking
+let stickState = {
+    left: { active: false, x: 0, y: 0 },
+    right: { active: false, x: 0, y: 0 }
+};
 
-// Add click handlers to regular buttons
-function addButtonListener(element, buttonName) {
-    if (!element) return;
+// Output log
+let outputLog = [];
+const MAX_LOG_LINES = 10;
+
+// Add button press listener
+function addButtonListener(button, name) {
+    if (!button) return;
     
-    element.addEventListener('mousedown', () => {
-        element.classList.add('active');
-        displayOutput(`${buttonName} PRESSED`);
+    button.addEventListener('mousedown', () => {
+        button.style.transform = 'scale(0.95)';
+        addOutput(`[${new Date().toLocaleTimeString()}] ${name} PRESSED`);
     });
     
-    element.addEventListener('mouseup', () => {
-        element.classList.remove('active');
-        displayOutput(`${buttonName} RELEASED`);
+    button.addEventListener('mouseup', () => {
+        button.style.transform = 'scale(1)';
+        addOutput(`[${new Date().toLocaleTimeString()}] ${name} RELEASED`);
     });
     
-    element.addEventListener('mouseleave', () => {
-        element.classList.remove('active');
+    button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1)';
     });
     
     // Touch support
-    element.addEventListener('touchstart', (e) => {
+    button.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        element.classList.add('active');
-        displayOutput(`${buttonName} PRESSED`);
+        button.style.transform = 'scale(0.95)';
+        addOutput(`[${new Date().toLocaleTimeString()}] ${name} PRESSED`);
     });
     
-    element.addEventListener('touchend', (e) => {
+    button.addEventListener('touchend', (e) => {
         e.preventDefault();
-        element.classList.remove('active');
-        displayOutput(`${buttonName} RELEASED`);
+        button.style.transform = 'scale(1)';
+        addOutput(`[${new Date().toLocaleTimeString()}] ${name} RELEASED`);
     });
 }
 
-// Add listeners for all buttons
-addButtonListener(buttons.lb, 'LB');
-addButtonListener(buttons.rb, 'RB');
-addButtonListener(buttons.lt, 'LT');
-addButtonListener(buttons.rt, 'RT');
+// Setup all button listeners
 addButtonListener(buttons.dpadUp, 'D-PAD UP');
 addButtonListener(buttons.dpadDown, 'D-PAD DOWN');
 addButtonListener(buttons.dpadLeft, 'D-PAD LEFT');
 addButtonListener(buttons.dpadRight, 'D-PAD RIGHT');
-addButtonListener(buttons.btnY, 'Y');
-addButtonListener(buttons.btnX, 'X');
-addButtonListener(buttons.btnB, 'B');
-addButtonListener(buttons.btnA, 'A');
-addButtonListener(buttons.leftStickBtn, 'L3');
-addButtonListener(buttons.rightStickBtn, 'R3');
-addButtonListener(buttons.viewBtn, 'VIEW');
-addButtonListener(buttons.menuBtn, 'MENU');
-addButtonListener(buttons.xboxBtn, 'XBOX');
+addButtonListener(buttons.y, 'Button Y');
+addButtonListener(buttons.x, 'Button X');
+addButtonListener(buttons.b, 'Button B');
+addButtonListener(buttons.a, 'Button A');
+addButtonListener(buttons.lb, 'LB Bumper');
+addButtonListener(buttons.rb, 'RB Bumper');
+addButtonListener(buttons.lt, 'LT Trigger');
+addButtonListener(buttons.rt, 'RT Trigger');
+addButtonListener(buttons.menu, 'Menu');
+addButtonListener(buttons.view, 'View');
+addButtonListener(buttons.xbox, 'Xbox Button');
+addButtonListener(buttons.leftStickClick, 'L3 (Left Stick Click)');
+addButtonListener(buttons.rightStickClick, 'R3 (Right Stick Click)');
 
 // Stick handling
-function handleStick(stickElement, stickInner, isLeft) {
-    const stickContainer = stickElement.parentElement;
-    const containerRect = stickContainer.getBoundingClientRect();
-    const containerCenterX = containerRect.width / 2;
-    const containerCenterY = containerRect.height / 2;
-    const maxDistance = 45;
-
-    function updateStickPosition(clientX, clientY) {
-        const rect = stickContainer.getBoundingClientRect();
-        const x = clientX - rect.left - containerCenterX;
-        const y = clientY - rect.top - containerCenterY;
+function setupStick(stickElement, stickName, side) {
+    if (!stickElement) return;
+    
+    const stickInner = stickElement.querySelector('.stick-inner');
+    const maxRadius = 40;
+    
+    function handleStickMove(clientX, clientY) {
+        const rect = stickElement.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const x = clientX - centerX;
+        const y = clientY - centerY;
         
         const distance = Math.sqrt(x * x + y * y);
         
-        if (distance <= maxDistance) {
-            stickInner.style.transform = `translate(${x}px, ${y}px)`;
-            if (isLeft) {
-                leftStickX = Math.round((x / maxDistance) * 100);
-                leftStickY = Math.round((y / maxDistance) * 100);
-            } else {
-                rightStickX = Math.round((x / maxDistance) * 100);
-                rightStickY = Math.round((y / maxDistance) * 100);
-            }
-            updateStickDisplay();
-        } else {
+        let finalX = x;
+        let finalY = y;
+        
+        if (distance > maxRadius) {
             const angle = Math.atan2(y, x);
-            const limitedX = Math.cos(angle) * maxDistance;
-            const limitedY = Math.sin(angle) * maxDistance;
-            stickInner.style.transform = `translate(${limitedX}px, ${limitedY}px)`;
-            if (isLeft) {
-                leftStickX = Math.round((limitedX / maxDistance) * 100);
-                leftStickY = Math.round((limitedY / maxDistance) * 100);
-            } else {
-                rightStickX = Math.round((limitedX / maxDistance) * 100);
-                rightStickY = Math.round((limitedY / maxDistance) * 100);
-            }
-            updateStickDisplay();
+            finalX = Math.cos(angle) * maxRadius;
+            finalY = Math.sin(angle) * maxRadius;
         }
-    }
-
-    function resetStick() {
-        stickInner.style.transform = 'translate(0, 0)';
-        if (isLeft) {
-            leftStickX = 0;
-            leftStickY = 0;
-            leftStickActive = false;
-        } else {
-            rightStickX = 0;
-            rightStickY = 0;
-            rightStickActive = false;
-        }
+        
+        stickInner.style.transform = `translate(${finalX}px, ${finalY}px)`;
+        
+        const stickX = Math.round((finalX / maxRadius) * 100);
+        const stickY = Math.round((finalY / maxRadius) * 100);
+        
+        stickState[side].x = stickX;
+        stickState[side].y = stickY;
+        
         updateStickDisplay();
     }
-
-    stickElement.addEventListener('mousedown', () => {
-        if (isLeft) {
-            leftStickActive = true;
-        } else {
-            rightStickActive = true;
-        }
-        displayOutput(`${isLeft ? 'LEFT' : 'RIGHT'} STICK ACTIVE`);
+    
+    stickElement.addEventListener('mousedown', (e) => {
+        stickState[side].active = true;
+        addOutput(`[${new Date().toLocaleTimeString()}] ${stickName} ACTIVE`);
+        handleStickMove(e.clientX, e.clientY);
     });
-
-    stickElement.addEventListener('mousemove', (e) => {
-        if (isLeft ? leftStickActive : rightStickActive) {
-            updateStickPosition(e.clientX, e.clientY);
+    
+    document.addEventListener('mousemove', (e) => {
+        if (stickState[side].active) {
+            handleStickMove(e.clientX, e.clientY);
         }
     });
-
-    stickElement.addEventListener('mouseup', resetStick);
-    stickElement.addEventListener('mouseleave', resetStick);
-
+    
+    document.addEventListener('mouseup', () => {
+        if (stickState[side].active) {
+            stickState[side].active = false;
+            stickState[side].x = 0;
+            stickState[side].y = 0;
+            stickInner.style.transform = 'translate(0, 0)';
+            addOutput(`[${new Date().toLocaleTimeString()}] ${stickName} RELEASED`);
+            updateStickDisplay();
+        }
+    });
+    
     // Touch support
-    stickElement.addEventListener('touchstart', () => {
-        if (isLeft) {
-            leftStickActive = true;
-        } else {
-            rightStickActive = true;
-        }
-        displayOutput(`${isLeft ? 'LEFT' : 'RIGHT'} STICK ACTIVE`);
+    stickElement.addEventListener('touchstart', (e) => {
+        stickState[side].active = true;
+        const touch = e.touches[0];
+        addOutput(`[${new Date().toLocaleTimeString()}] ${stickName} ACTIVE`);
+        handleStickMove(touch.clientX, touch.clientY);
     });
-
-    stickElement.addEventListener('touchmove', (e) => {
-        if (isLeft ? leftStickActive : rightStickActive) {
-            e.preventDefault();
+    
+    document.addEventListener('touchmove', (e) => {
+        if (stickState[side].active) {
             const touch = e.touches[0];
-            updateStickPosition(touch.clientX, touch.clientY);
+            handleStickMove(touch.clientX, touch.clientY);
         }
     });
-
-    stickElement.addEventListener('touchend', resetStick);
+    
+    document.addEventListener('touchend', () => {
+        if (stickState[side].active) {
+            stickState[side].active = false;
+            stickState[side].x = 0;
+            stickState[side].y = 0;
+            stickInner.style.transform = 'translate(0, 0)';
+            addOutput(`[${new Date().toLocaleTimeString()}] ${stickName} RELEASED`);
+            updateStickDisplay();
+        }
+    });
 }
 
-handleStick(buttons.leftStick, buttons.leftStick.querySelector('.stick-inner'), true);
-handleStick(buttons.rightStick, buttons.rightStick.querySelector('.stick-inner'), false);
+setupStick(buttons.leftStick, 'Left Stick', 'left');
+setupStick(buttons.rightStick, 'Right Stick', 'right');
 
-// Display output
-let outputTimeout;
-function displayOutput(message) {
-    buttons.outputDisplay.textContent = message;
+// Output management
+function addOutput(message) {
+    outputLog.unshift(message);
+    if (outputLog.length > MAX_LOG_LINES) {
+        outputLog.pop();
+    }
+    updateDisplayOutput();
+}
+
+function updateDisplayOutput() {
+    const placeholder = buttons.outputDisplay.querySelector('.placeholder');
+    if (placeholder) {
+        placeholder.remove();
+    }
     
-    clearTimeout(outputTimeout);
-    outputTimeout = setTimeout(() => {
-        buttons.outputDisplay.textContent = 'Press buttons to see activity...';
-    }, 2000);
+    buttons.outputDisplay.innerHTML = outputLog.map(line => `<div>${line}</div>`).join('');
 }
 
 function updateStickDisplay() {
-    const message = `LEFT STICK: (${leftStickX}, ${leftStickY}) | RIGHT STICK: (${rightStickX}, ${rightStickY})`;
-    buttons.outputDisplay.textContent = message;
+    const leftStickInfo = `LEFT: (${stickState.left.x}, ${stickState.left.y})`;
+    const rightStickInfo = `RIGHT: (${stickState.right.x}, ${stickState.right.y})`;
+    addOutput(`STICK POSITION: ${leftStickInfo} | ${rightStickInfo}`);
 }
 
 // Keyboard support
 const keyMap = {
-    'w': 'dpadUp',
-    's': 'dpadDown',
-    'a': 'dpadLeft',
-    'd': 'dpadRight',
-    'y': 'btnY',
-    'x': 'btnX',
-    'b': 'btnB',
-    ' ': 'btnA',
-    'q': 'lb',
-    'e': 'rb',
-    't': 'lt',
-    'g': 'rt',
-    'v': 'viewBtn',
-    'm': 'menuBtn',
-    'z': 'xboxBtn',
+    'w': { element: 'dpadUp', name: 'D-PAD UP' },
+    's': { element: 'dpadDown', name: 'D-PAD DOWN' },
+    'a': { element: 'dpadLeft', name: 'D-PAD LEFT' },
+    'd': { element: 'dpadRight', name: 'D-PAD RIGHT' },
+    'y': { element: 'y', name: 'Button Y' },
+    'x': { element: 'x', name: 'Button X' },
+    'b': { element: 'b', name: 'Button B' },
+    ' ': { element: 'a', name: 'Button A' },
+    'q': { element: 'lb', name: 'LB Bumper' },
+    'e': { element: 'rb', name: 'RB Bumper' },
+    't': { element: 'lt', name: 'LT Trigger' },
+    'g': { element: 'rt', name: 'RT Trigger' },
+    'v': { element: 'view', name: 'View' },
+    'm': { element: 'menu', name: 'Menu' },
+    'z': { element: 'xbox', name: 'Xbox Button' },
 };
+
+const activeKeys = new Set();
 
 document.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
-    if (keyMap[key]) {
-        const element = buttons[keyMap[key]];
-        if (element && !element.classList.contains('active')) {
-            element.classList.add('active');
-            element.dispatchEvent(new MouseEvent('mousedown'));
+    if (keyMap[key] && !activeKeys.has(key)) {
+        activeKeys.add(key);
+        const btn = buttons[keyMap[key].element];
+        if (btn) {
+            btn.dispatchEvent(new MouseEvent('mousedown'));
         }
     }
 });
@@ -227,13 +247,14 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
     const key = e.key.toLowerCase();
     if (keyMap[key]) {
-        const element = buttons[keyMap[key]];
-        if (element) {
-            element.classList.remove('active');
-            element.dispatchEvent(new MouseEvent('mouseup'));
+        activeKeys.delete(key);
+        const btn = buttons[keyMap[key].element];
+        if (btn) {
+            btn.dispatchEvent(new MouseEvent('mouseup'));
         }
     }
 });
 
 // Initialize
-displayOutput('Ready! Click buttons or use keyboard...');
+addOutput('Xbox Controller Ready!');
+addOutput('Click buttons, drag sticks, or use keyboard shortcuts...');
